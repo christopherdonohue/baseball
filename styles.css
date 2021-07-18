@@ -1,0 +1,50 @@
+.container {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.row-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5em;
+}
+
+.dodgers,
+.rockies {
+  position: relative;
+  text-align: center;
+  border: 1px solid black;
+  border-radius: 3px;
+  width: 400px;
+  height: 500px;
+}
+
+#dodgersLineup,
+#rockiesLineup {
+  width: 90%;
+  position: absolute;
+  left: 50%;
+  top: 35%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  padding-right: 1em;
+}
+
+.form-container {
+  position: absolute;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  height: 150px;
+
+  width: 90%;
+  bottom: 1em;
+  right: 50%;
+  transform: translateX(50%);
+}

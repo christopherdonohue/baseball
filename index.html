@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <section class="container">
+      <h1>Baseball Is Not Boring</h1>
+
+      <div class="row-container">
+        <div class="dodgers">
+          <h3>Los Angeles Dodgers</h3>
+
+          <table id="dodgersLineup">
+            <thead>
+              <tr>
+                <th>Player</th>
+                <th>Number</th>
+                <th>Position</th>
+                <th>Avg</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+
+          <form
+            action="/test/index.html"
+            id="playerForm"
+            method="post"
+            class="form-container"
+          >
+            <input id="player" type="text" placeholder="Name" />
+            <input id="jerseyNumber" type="text" placeholder="Jersey Number" />
+            <input
+              id="positionPlayed"
+              type="text"
+              placeholder="Position Played"
+            />
+            <input
+              id="battingAverage"
+              type="text"
+              placeholder="Batting Average"
+            />
+            <button name="submit" type="submit">Submit</button>
+          </form>
+        </div>
+        <div class="rockies">
+          <h3>Colorodo Rockies</h3>
+          <table id="rockiesLineup">
+            <thead>
+              <tr>
+                <th>Player</th>
+                <th>Number</th>
+                <th>Position</th>
+                <th>Avg</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+    <script src="index.js"></script>
+  </body>
+</html>
