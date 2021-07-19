@@ -12,10 +12,11 @@
       <h1>Baseball Is Not Boring</h1>
 
       <div class="row-container">
-        <div class="dodgers">
+        <div class="away">
+          <h2>Away</h2>
           <h3>Los Angeles Dodgers</h3>
 
-          <table id="dodgersLineup">
+          <table id="awayTeamLineup">
             <thead>
               <tr>
                 <th>Player</th>
@@ -26,12 +27,10 @@
             </thead>
             <tbody></tbody>
           </table>
-
           <form
-            action="/test/index.html"
-            id="playerForm"
+            id="awayTeamPlayerForm"
             method="post"
-            class="form-container"
+            class="form-container-away"
           >
             <input id="player" type="text" placeholder="Name" />
             <input id="jerseyNumber" type="text" placeholder="Jersey Number" />
@@ -45,12 +44,13 @@
               type="text"
               placeholder="Batting Average"
             />
-            <button name="submit" type="submit">Submit</button>
+            <button name="submit-away" type="submit">Submit</button>
           </form>
         </div>
-        <div class="rockies">
-          <h3>Colorodo Rockies</h3>
-          <table id="rockiesLineup">
+        <div class="home">
+          <h2>Home</h2>
+          <h3>Colorado Rockies</h3>
+          <table id="homeTeamLineup">
             <thead>
               <tr>
                 <th>Player</th>
@@ -61,6 +61,25 @@
             </thead>
             <tbody></tbody>
           </table>
+          <form
+            id="homeTeamPlayerForm"
+            method="post"
+            class="form-container-home"
+          >
+            <input id="player" type="text" placeholder="Name" />
+            <input id="jerseyNumber" type="text" placeholder="Jersey Number" />
+            <input
+              id="positionPlayed"
+              type="text"
+              placeholder="Position Played"
+            />
+            <input
+              id="battingAverage"
+              type="text"
+              placeholder="Batting Average"
+            />
+            <button name="submit-home" type="submit">Submit</button>
+          </form>
         </div>
       </div>
     </section>

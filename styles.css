@@ -13,8 +13,8 @@
   gap: 1.5em;
 }
 
-.dodgers,
-.rockies {
+.away,
+.home {
   position: relative;
   text-align: center;
   border: 1px solid black;
@@ -23,18 +23,19 @@
   height: 500px;
 }
 
-#dodgersLineup,
-#rockiesLineup {
+#awayTeamLineup,
+#homeTeamLineup {
   width: 90%;
   position: absolute;
   left: 50%;
   top: 35%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -32%);
   text-align: center;
   padding-right: 1em;
 }
 
-.form-container {
+.form-container-away,
+.form-container-home {
   position: absolute;
   display: flex;
   flex-flow: column nowrap;

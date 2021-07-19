@@ -1,4 +1,4 @@
-const dodgersLineup = [
+const awayLineup = [
   {
     player: 'Cody Bellinger',
     jerseyNumber: 35,
@@ -55,7 +55,7 @@ const dodgersLineup = [
   },
 ];
 
-const rockiesLineup = [
+const homeLineup = [
   {
     player: 'Garrett Hampson',
     jerseyNumber: 11,
@@ -123,28 +123,50 @@ const addDataToTbody = (nodeList, players) => {
   });
 };
 
-// Add player to lineup
-const handleSubmit = (e) => {
+const handleSubmit = (e, team) => {
   e.preventDefault();
+  // ADD PLAYER TO LINEUP AWAY TEAM
+  /* IDEALLY THIS FUNCTIONALITY CAN BE ONE SINGLE COMPONENT THAT HANDLES DYNAMIC DATA FROM BOTH TEAMS*/
+  if (team === 'away') {
+    const newPlayer = Array.from(
+      document.querySelectorAll('#awayTeamPlayerForm input')
+    ).reduce((acc, input) => ({ ...acc, [input.id]: input.value }), {});
 
-  const newPlayer = Array.from(
-    document.querySelectorAll('#playerForm input')
-  ).reduce((acc, input) => ({ ...acc, [input.id]: input.value }), {});
+    awayLineup.push(newPlayer);
+    console.log(awayLineup);
+    const tr = awayLineupBody.insertRow(awayLineup.length - 1);
+    Object.keys(newPlayer).forEach((key, j) => {
+      const cell = tr.insertCell(j);
+      cell.innerHTML = newPlayer[key];
+    });
+    awayLineupBody.appendChild(tr);
+  } else {
+    // ADD PLAYER TO LINEUP HOME TEAM
+    const newPlayer = Array.from(
+      document.querySelectorAll('#homeTeamPlayerForm input')
+    ).reduce((acc, input) => ({ ...acc, [input.id]: input.value }), {});
 
-  dodgersLineup.push(newPlayer);
-  const tr = dodgersLineupBody.insertRow(dodgersLineup.length - 1);
-  Object.keys(newPlayer).forEach((key, j) => {
-    const cell = tr.insertCell(j);
-    cell.innerHTML = newPlayer[key];
-  });
-  dodgersLineupBody.appendChild(tr);
+    homeLineup.push(newPlayer);
+    console.log(homeLineup);
+    const tr = homeLineupBody.insertRow(homeLineup.length - 1);
+    Object.keys(newPlayer).forEach((key, j) => {
+      const cell = tr.insertCell(j);
+      cell.innerHTML = newPlayer[key];
+    });
+    homeLineupBody.appendChild(tr);
+  }
 };
-let form = document.getElementById('playerForm');
-form.addEventListener('submit', handleSubmit, true);
 
-const dodgersLineupBody = document.querySelector('#dodgersLineup tbody');
-const rockiesLineupBody = document.querySelector('#rockiesLineup');
-const dodgersForm = document.querySelector('.form-container');
+const awayForm = document.getElementById('awayTeamPlayerForm');
+const homeForm = document.getElementById('homeTeamPlayerForm');
+awayForm.addEventListener('submit', (e) => handleSubmit(e, 'away'), true);
+homeForm.addEventListener('submit', (e) => handleSubmit(e, 'home'), true);
 
-addDataToTbody(dodgersLineupBody, dodgersLineup);
-addDataToTbody(rockiesLineupBody, rockiesLineup);
+const awayLineupBody = document.querySelector('#awayTeamLineup tbody');
+const homeLineupBody = document.querySelector('#homeTeamLineup tbody');
+// const awayForm = document.querySelector('.form-container-away');
+
+// const homeForm = document.querySelector('.form-container-home');
+
+addDataToTbody(awayLineupBody, awayLineup);
+addDataToTbody(homeLineupBody, homeLineup);
