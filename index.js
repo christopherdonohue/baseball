@@ -1,115 +1,115 @@
 const awayLineup = [
-  {
-    player: 'Cody Bellinger',
-    jerseyNumber: 35,
-    positionPlayed: 'CF',
-    battingAverage: '.173',
-  },
-  {
-    player: 'Max Muncy',
-    jerseyNumber: 13,
-    positionPlayed: '1B',
-    battingAverage: '.278',
-  },
-  {
-    player: 'Justin Turner',
-    jerseyNumber: 10,
-    positionPlayed: '3B',
-    battingAverage: '.303',
-  },
-  {
-    player: 'Will Smith',
-    jerseyNumber: 16,
-    positionPlayed: 'C',
-    battingAverage: '.256',
-  },
-  {
-    player: 'Chris Taylor',
-    jerseyNumber: 3,
-    positionPlayed: '2B',
-    battingAverage: '.272',
-  },
-  {
-    player: 'Zack McKinstry',
-    jerseyNumber: 8,
-    positionPlayed: 'RF',
-    battingAverage: '.248',
-  },
-  {
-    player: 'AJ Pollock',
-    jerseyNumber: 11,
-    positionPlayed: 'LF',
-    battingAverage: '.275',
-  },
-  {
-    player: 'Gavin Lux',
-    jerseyNumber: 9,
-    positionPlayed: 'SS',
-    battingAverage: '.230',
-  },
-  {
-    player: 'David Price',
-    jerseyNumber: 33,
-    positionPlayed: 'P',
-    battingAverage: '.000',
-  },
+  // {
+  //   player: 'Cody Bellinger',
+  //   jerseyNumber: 35,
+  //   positionPlayed: 'CF',
+  //   battingAverage: '.173',
+  // },
+  // {
+  //   player: 'Max Muncy',
+  //   jerseyNumber: 13,
+  //   positionPlayed: '1B',
+  //   battingAverage: '.278',
+  // },
+  // {
+  //   player: 'Justin Turner',
+  //   jerseyNumber: 10,
+  //   positionPlayed: '3B',
+  //   battingAverage: '.303',
+  // },
+  // {
+  //   player: 'Will Smith',
+  //   jerseyNumber: 16,
+  //   positionPlayed: 'C',
+  //   battingAverage: '.256',
+  // },
+  // {
+  //   player: 'Chris Taylor',
+  //   jerseyNumber: 3,
+  //   positionPlayed: '2B',
+  //   battingAverage: '.272',
+  // },
+  // {
+  //   player: 'Zack McKinstry',
+  //   jerseyNumber: 8,
+  //   positionPlayed: 'RF',
+  //   battingAverage: '.248',
+  // },
+  // {
+  //   player: 'AJ Pollock',
+  //   jerseyNumber: 11,
+  //   positionPlayed: 'LF',
+  //   battingAverage: '.275',
+  // },
+  // {
+  //   player: 'Gavin Lux',
+  //   jerseyNumber: 9,
+  //   positionPlayed: 'SS',
+  //   battingAverage: '.230',
+  // },
+  // {
+  //   player: 'David Price',
+  //   jerseyNumber: 33,
+  //   positionPlayed: 'P',
+  //   battingAverage: '.000',
+  // },
 ];
 
 const homeLineup = [
-  {
-    player: 'Garrett Hampson',
-    jerseyNumber: 11,
-    positionPlayed: 'CF',
-    battingAverage: '.249',
-  },
-  {
-    player: 'Brendan Rodgers',
-    jerseyNumber: 7,
-    positionPlayed: '2B',
-    battingAverage: '.268',
-  },
-  {
-    player: 'Trevor Story',
-    jerseyNumber: 27,
-    positionPlayed: 'SS',
-    battingAverage: '.246',
-  },
-  {
-    player: 'Charlie Blackmon',
-    jerseyNumber: 19,
-    positionPlayed: 'RF',
-    battingAverage: '.266',
-  },
-  {
-    player: 'CJ Cron',
-    jerseyNumber: 25,
-    positionPlayed: '1B',
-    battingAverage: '.251',
-  },
-  {
-    player: 'Ryan McMahon',
-    jerseyNumber: 24,
-    positionPlayed: '2B',
-    battingAverage: '.253',
-  },
-  {
-    player: 'Elias Diaz',
-    jerseyNumber: 35,
-    positionPlayed: 'C',
-    battingAverage: '.209',
-  },
-  {
-    player: 'Chris Owings',
-    jerseyNumber: 12,
-    positionPlayed: 'LF',
-    battingAverage: '.300',
-  },
-  {
-    player: 'Jon Gray',
-    jerseyNumber: 55,
-    positionPlayed: 'P',
-    battingAverage: '.143',
-  },
+  // {
+  //   player: 'Garrett Hampson',
+  //   jerseyNumber: 11,
+  //   positionPlayed: 'CF',
+  //   battingAverage: '.249',
+  // },
+  // {
+  //   player: 'Brendan Rodgers',
+  //   jerseyNumber: 7,
+  //   positionPlayed: '2B',
+  //   battingAverage: '.268',
+  // },
+  // {
+  //   player: 'Trevor Story',
+  //   jerseyNumber: 27,
+  //   positionPlayed: 'SS',
+  //   battingAverage: '.246',
+  // },
+  // {
+  //   player: 'Charlie Blackmon',
+  //   jerseyNumber: 19,
+  //   positionPlayed: 'RF',
+  //   battingAverage: '.266',
+  // },
+  // {
+  //   player: 'CJ Cron',
+  //   jerseyNumber: 25,
+  //   positionPlayed: '1B',
+  //   battingAverage: '.251',
+  // },
+  // {
+  //   player: 'Ryan McMahon',
+  //   jerseyNumber: 24,
+  //   positionPlayed: '2B',
+  //   battingAverage: '.253',
+  // },
+  // {
+  //   player: 'Elias Diaz',
+  //   jerseyNumber: 35,
+  //   positionPlayed: 'C',
+  //   battingAverage: '.209',
+  // },
+  // {
+  //   player: 'Chris Owings',
+  //   jerseyNumber: 12,
+  //   positionPlayed: 'LF',
+  //   battingAverage: '.300',
+  // },
+  // {
+  //   player: 'Jon Gray',
+  //   jerseyNumber: 55,
+  //   positionPlayed: 'P',
+  //   battingAverage: '.143',
+  // },
 ];
 
 const addDataToTbody = (nodeList, players) => {
@@ -126,7 +126,6 @@ const addDataToTbody = (nodeList, players) => {
 const handleSubmit = (e, team) => {
   e.preventDefault();
   // ADD PLAYER TO LINEUP AWAY TEAM
-  /* IDEALLY THIS FUNCTIONALITY CAN BE ONE SINGLE COMPONENT THAT HANDLES DYNAMIC DATA FROM BOTH TEAMS*/
   if (team === 'away') {
     const newPlayer = Array.from(
       document.querySelectorAll('#awayTeamPlayerForm input')

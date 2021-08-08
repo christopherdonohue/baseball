@@ -25,13 +25,14 @@
 
 #awayTeamLineup,
 #homeTeamLineup {
-  width: 90%;
   position: absolute;
   left: 50%;
-  top: 35%;
-  transform: translate(-50%, -32%);
+  top: 18%;
+  width: 90%;
+  transform: translateX(-50%);
   text-align: center;
   padding-right: 1em;
+  border: 1px solid black;
 }
 
 .form-container-away,
