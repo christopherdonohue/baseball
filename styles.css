@@ -49,4 +49,32 @@
   bottom: 1em;
   right: 50%;
   transform: translateX(50%);
+  visibility: hidden;
+}
+
+.bottom-container {
+  position: absolute;
+  width: 40%;
+  display: flex;
+
+  justify-content: space-around;
+  align-items: center;
+  bottom: 0;
+  right: 50%;
+  transform: translate(50%);
+  cursor: pointer;
+}
+.add-player.home-team,
+.add-player.away-team {
+  color: blue;
+}
+
+.clear-team.home-team,
+.clear-team.away-team {
+  color: red;
+}
+
+.show-form,
+.show-clear-btn {
+  visibility: visible;
 }
