@@ -2,6 +2,32 @@ let awayLineup = [];
 
 let homeLineup = [];
 
+const awayLineupBody = document.querySelector('#awayTeamLineup tbody');
+const homeLineupBody = document.querySelector('#homeTeamLineup tbody');
+
+const awayForm = document.getElementById('awayTeamPlayerForm');
+const awayFormClass = document.querySelector('.form-container-away');
+const homeFormClass = document.querySelector('.form-container-home');
+const homeForm = document.getElementById('homeTeamPlayerForm');
+const addPlayerBtns = document.querySelectorAll('.add-player');
+const clearBtns = document.querySelectorAll('.clear-team');
+let globalIndex;
+
+const test = () => {
+  awayLineupBody.childNodes.forEach((child, index) => {
+    child.addEventListener('click', (e) => {
+      globalIndex = index;
+      awayForm.classList.toggle('show-form');
+      awayForm.classList.toggle('edit');
+    });
+  });
+  homeLineupBody.childNodes.forEach((child) => {
+    child.addEventListener('click', () => {
+      console.log(child);
+    });
+  });
+};
+
 const addDataToTbody = (nodeList, players) => {
   players.forEach((player, i) => {
     const tr = nodeList.insertRow(i);
@@ -13,25 +39,38 @@ const addDataToTbody = (nodeList, players) => {
   });
 };
 
-const awayLineupBody = document.querySelector('#awayTeamLineup tbody');
-const homeLineupBody = document.querySelector('#homeTeamLineup tbody');
-
 const handleSubmit = (e, team) => {
   e.preventDefault();
   // ADD PLAYER TO LINEUP AWAY TEAM
   if (team === 'away') {
-    const newPlayer = Array.from(
-      document.querySelectorAll('#awayTeamPlayerForm input')
-    ).reduce((acc, input) => ({ ...acc, [input.id]: input.value }), {});
-    awayLineup.push(newPlayer);
-    localStorage.setItem('awayLineup', JSON.stringify(awayLineup));
-    console.log(newPlayer);
-    const tr = awayLineupBody.insertRow(awayLineup.length - 1);
-    Object.keys(newPlayer).forEach((key, j) => {
-      const cell = tr.insertCell(j);
-      cell.innerHTML = newPlayer[key];
-    });
-    awayLineupBody.appendChild(tr);
+    if (awayForm.classList.contains('edit')) {
+      console.log(e.target[globalIndex].value);
+      awayLineup[globalIndex].player = e.target[0].value;
+      awayLineup[globalIndex].jerseyNumber = e.target[1].value;
+      awayLineup[globalIndex].positionPlayed = e.target[2].value;
+      awayLineup[globalIndex].battingAverage = e.target[3].value;
+      Object.keys(awayLineup[globalIndex]).forEach((key, index) => {
+        awayLineupBody.childNodes[globalIndex].childNodes[index].innerHTML =
+          e.target[index].value;
+      });
+      localStorage.setItem('awayLineup', JSON.stringify(awayLineup));
+    } else {
+      const newPlayer = Array.from(
+        document.querySelectorAll('#awayTeamPlayerForm input')
+      ).reduce((acc, input) => ({ ...acc, [input.id]: input.value }), {});
+      awayLineup.push(newPlayer);
+      localStorage.setItem('awayLineup', JSON.stringify(awayLineup));
+      console.log(newPlayer);
+      const tr = awayLineupBody.insertRow(awayLineup.length - 1);
+      Object.keys(newPlayer).forEach((key, j) => {
+        const cell = tr.insertCell(j);
+        cell.innerHTML = newPlayer[key];
+      });
+      awayLineupBody.appendChild(tr);
+      tr.addEventListener('click', () => {
+        console.log(tr);
+      });
+    }
   } else {
     // ADD PLAYER TO LINEUP HOME TEAM
     const newPlayer = Array.from(
@@ -47,15 +86,11 @@ const handleSubmit = (e, team) => {
       cell.innerHTML = newPlayer[key];
     });
     homeLineupBody.appendChild(tr);
+    tr.addEventListener('click', () => {
+      console.log(tr);
+    });
   }
 };
-
-const awayForm = document.getElementById('awayTeamPlayerForm');
-const awayFormClass = document.querySelector('.form-container-away');
-const homeFormClass = document.querySelector('.form-container-home');
-const homeForm = document.getElementById('homeTeamPlayerForm');
-const addPlayerBtns = document.querySelectorAll('.add-player');
-const clearBtns = document.querySelectorAll('.clear-team');
 
 awayForm.addEventListener('submit', (e) => handleSubmit(e, 'away'), true);
 homeForm.addEventListener('submit', (e) => handleSubmit(e, 'home'), true);
@@ -114,6 +149,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   addDataToTbody(awayLineupBody, awayLineup);
   addDataToTbody(homeLineupBody, homeLineup);
+  test();
 });
 
 // const awayForm = document.querySelector('.form-container-away');
