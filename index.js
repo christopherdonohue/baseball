@@ -4,6 +4,8 @@ let homeLineup = [];
 
 const awayLineupBody = document.querySelector('#awayTeamLineup tbody');
 const homeLineupBody = document.querySelector('#homeTeamLineup tbody');
+const homeTeamBattingBody = document.querySelector('#homeTeamBatting tbody');
+const homeInnings = document.querySelector('.score-rows');
 
 const awayForm = document.getElementById('awayTeamPlayerForm');
 const awayFormClass = document.querySelector('.form-container-away');
@@ -11,9 +13,12 @@ const homeFormClass = document.querySelector('.form-container-home');
 const homeForm = document.getElementById('homeTeamPlayerForm');
 const addPlayerBtns = document.querySelectorAll('.add-player');
 const clearBtns = document.querySelectorAll('.clear-team');
+const playFormContainer = document.querySelector('.play-form-container');
+const playFormHome = document.querySelector('.play-form-home');
+
 let globalIndex;
 
-const test = () => {
+const grantAbilityToEdit = () => {
   awayLineupBody.childNodes.forEach((child, index) => {
     child.addEventListener('click', (e) => {
       globalIndex = index;
@@ -21,10 +26,45 @@ const test = () => {
       awayForm.classList.toggle('edit');
     });
   });
-  homeLineupBody.childNodes.forEach((child) => {
+  homeLineupBody.childNodes.forEach((child, index) => {
     child.addEventListener('click', () => {
-      console.log(child);
+      globalIndex = index;
+      homeForm.classList.toggle('show-form');
+      homeForm.classList.toggle('edit');
     });
+  });
+};
+
+const addBattersToTBody = (nodeList, players) => {
+  let tr;
+  players.forEach((player, i) => {
+    tr = nodeList.insertRow(i);
+    let cell = tr.insertCell(0);
+    Object.keys(player).forEach((key, j) => {
+      cell.innerHTML += player[key] + '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp';
+    });
+    nodeList.appendChild(tr);
+    // Empty cells added for each at-bat
+    for (let i = 1; i < homeInnings.children.length; i++) {
+      let cell = tr.insertCell(i);
+      cell.classList.add('inning');
+      cell.classList.add(`${i}`);
+      // listen for click to edit at-bat
+      cell.addEventListener('click', () => {
+        cell.classList.add('edit');
+        playFormContainer.classList.add('show-play-form');
+        //listen for submit after at-bat edit
+        playFormHome.addEventListener('submit', (e) => {
+          e.preventDefault();
+          console.log(e.target[0].value);
+          // only clicked cell gets edited
+          if (cell.classList.contains('edit'))
+            cell.innerHTML = e.target[0].value;
+          cell.classList.remove('edit');
+          playFormContainer.classList.remove('show-play-form');
+        });
+      });
+    }
   });
 };
 
@@ -72,23 +112,37 @@ const handleSubmit = (e, team) => {
       });
     }
   } else {
-    // ADD PLAYER TO LINEUP HOME TEAM
-    const newPlayer = Array.from(
-      document.querySelectorAll('#homeTeamPlayerForm input')
-    ).reduce((acc, input) => ({ ...acc, [input.id]: input.value }), {});
+    if (homeForm.classList.contains('edit')) {
+      console.log(e.target[globalIndex].value);
+      homeLineup[globalIndex].player = e.target[0].value;
+      homeLineup[globalIndex].jerseyNumber = e.target[1].value;
+      homeLineup[globalIndex].positionPlayed = e.target[2].value;
+      homeLineup[globalIndex].battingAverage = e.target[3].value;
+      Object.keys(homeLineup[globalIndex]).forEach((key, index) => {
+        homeLineupBody.childNodes[globalIndex].childNodes[index].innerHTML =
+          e.target[index].value;
+      });
+      localStorage.setItem('homeLineup', JSON.stringify(homeLineup));
+    } else {
+      // ADD PLAYER TO LINEUP HOME TEAM
+      const newPlayer = Array.from(
+        document.querySelectorAll('#homeTeamPlayerForm input')
+      ).reduce((acc, input) => ({ ...acc, [input.id]: input.value }), {});
 
-    homeLineup.push(newPlayer);
-    localStorage.setItem('homeLineup', JSON.stringify(homeLineup));
-    console.log(homeLineup);
-    const tr = homeLineupBody.insertRow(homeLineup.length - 1);
-    Object.keys(newPlayer).forEach((key, j) => {
-      const cell = tr.insertCell(j);
-      cell.innerHTML = newPlayer[key];
-    });
-    homeLineupBody.appendChild(tr);
-    tr.addEventListener('click', () => {
-      console.log(tr);
-    });
+      homeLineup.push(newPlayer);
+      localStorage.setItem('homeLineup', JSON.stringify(homeLineup));
+      console.log(homeLineup);
+      const tr = homeLineupBody.insertRow(homeLineup.length - 1);
+      Object.keys(newPlayer).forEach((key, j) => {
+        const cell = tr.insertCell(j);
+        cell.innerHTML = newPlayer[key];
+      });
+      homeLineupBody.appendChild(tr);
+
+      tr.addEventListener('click', () => {
+        console.log(tr);
+      });
+    }
   }
 };
 
@@ -149,12 +203,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
   addDataToTbody(awayLineupBody, awayLineup);
   addDataToTbody(homeLineupBody, homeLineup);
-  test();
+  addBattersToTBody(homeTeamBattingBody, homeLineup);
+  grantAbilityToEdit();
 });
 
 // const awayForm = document.querySelector('.form-container-away');
 
 // const homeForm = document.querySelector('.form-container-home');
 
-addDataToTbody(awayLineupBody, awayLineup);
-addDataToTbody(homeLineupBody, homeLineup);
+// addDataToTbody(awayLineupBody, awayLineup);
+// addDataToTbody(homeLineupBody, homeLineup);
+
+// addBattersToTBody(homeTeamBattingBody, homeLineup);

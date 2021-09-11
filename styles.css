@@ -78,3 +78,20 @@
 .show-clear-btn {
   visibility: visible;
 }
+
+table,
+th,
+td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.play-form-container {
+  position: absolute;
+  transform: translateY(-1000%);
+  visibility: hidden;
+}
+
+.show-play-form {
+  visibility: visible;
+}
