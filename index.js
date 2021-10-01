@@ -35,36 +35,54 @@ const grantAbilityToEdit = () => {
   });
 };
 
+const addBlankCellsForBattingScore = (tr, team, lineup) => {
+  for (let i = 1; i < team.children.length; i++) {
+    let cell = tr.insertCell(i);
+    cell.classList.add('inning');
+    cell.classList.add(`${i}`);
+
+    // listen for click to edit at-bat
+    cell.addEventListener('click', (e) => {
+      const inning = e.currentTarget.classList[1];
+      homeTeamBattingBody.childNodes.forEach((row) => {
+        row.childNodes.forEach((item) => {
+          if (item.classList[1] !== inning) {
+            item.classList.remove('edit');
+          }
+          if (item.className === '') {
+            console.log(item.innerText);
+          }
+        });
+      });
+
+      cell.classList.add('edit');
+      playFormContainer.classList.add('show-play-form');
+      //listen for submit after at-bat edit
+      playFormHome.addEventListener('submit', (e) => {
+        e.preventDefault();
+        console.log(e.target[0].value);
+        // only clicked cell gets edited
+        if (cell.classList.contains('edit')) cell.innerHTML = e.target[0].value;
+        cell.classList.remove('edit');
+        playFormContainer.classList.remove('show-play-form');
+      });
+    });
+  }
+};
+
 const addBattersToTBody = (nodeList, players) => {
   let tr;
   players.forEach((player, i) => {
     tr = nodeList.insertRow(i);
+    let short = player.player.replace(' ', '');
     let cell = tr.insertCell(0);
+    cell.classList.add(short);
     Object.keys(player).forEach((key, j) => {
       cell.innerHTML += player[key] + '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp';
     });
     nodeList.appendChild(tr);
-    // Empty cells added for each at-bat
-    for (let i = 1; i < homeInnings.children.length; i++) {
-      let cell = tr.insertCell(i);
-      cell.classList.add('inning');
-      cell.classList.add(`${i}`);
-      // listen for click to edit at-bat
-      cell.addEventListener('click', () => {
-        cell.classList.add('edit');
-        playFormContainer.classList.add('show-play-form');
-        //listen for submit after at-bat edit
-        playFormHome.addEventListener('submit', (e) => {
-          e.preventDefault();
-          console.log(e.target[0].value);
-          // only clicked cell gets edited
-          if (cell.classList.contains('edit'))
-            cell.innerHTML = e.target[0].value;
-          cell.classList.remove('edit');
-          playFormContainer.classList.remove('show-play-form');
-        });
-      });
-    }
+
+    addBlankCellsForBattingScore(tr, homeInnings, homeLineup);
   });
 };
 
@@ -131,17 +149,23 @@ const handleSubmit = (e, team) => {
 
       homeLineup.push(newPlayer);
       localStorage.setItem('homeLineup', JSON.stringify(homeLineup));
-      console.log(homeLineup);
       const tr = homeLineupBody.insertRow(homeLineup.length - 1);
       Object.keys(newPlayer).forEach((key, j) => {
         const cell = tr.insertCell(j);
         cell.innerHTML = newPlayer[key];
       });
       homeLineupBody.appendChild(tr);
-
-      tr.addEventListener('click', () => {
-        console.log(tr);
+      const tr2 = homeTeamBattingBody.insertRow(homeLineup.length - 1);
+      let cell2 = tr2.insertCell(0);
+      tr.childNodes.forEach((node) => {
+        cell2.innerHTML += node.innerHTML + '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp';
       });
+
+      // add player name to td classlist. This helps ensure you don't edit two player's at-bats at the same time.
+      const playerNameForClass = newPlayer.player.replace(' ', '');
+      cell2.classList.add(playerNameForClass);
+      console.log(cell2);
+      addBlankCellsForBattingScore(tr2, homeInnings, homeLineup);
     }
   }
 };
@@ -206,12 +230,3 @@ window.addEventListener('DOMContentLoaded', () => {
   addBattersToTBody(homeTeamBattingBody, homeLineup);
   grantAbilityToEdit();
 });
-
-// const awayForm = document.querySelector('.form-container-away');
-
-// const homeForm = document.querySelector('.form-container-home');
-
-// addDataToTbody(awayLineupBody, awayLineup);
-// addDataToTbody(homeLineupBody, homeLineup);
-
-// addBattersToTBody(homeTeamBattingBody, homeLineup);
