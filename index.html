@@ -93,7 +93,7 @@
     </section>
     <table id="homeTeamBatting" class="homeTeamBatting">
       <thead>
-        <tr class="score-rows">
+        <tr class="score-rows-home">
           <th></th>
           <th>1</th>
           <th>2</th>
@@ -108,8 +108,31 @@
       </thead>
       <tbody></tbody>
     </table>
-    <div class="play-form-container">
+    <table id="awayTeamBatting" class="awayTeamBatting">
+      <thead>
+        <tr class="score-rows-away">
+          <th></th>
+          <th>1</th>
+          <th>2</th>
+          <th>3</th>
+          <th>4</th>
+          <th>5</th>
+          <th>6</th>
+          <th>7</th>
+          <th>8</th>
+          <th>9</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div class="play-form-container-home">
       <form class="play-form-home">
+        <label for="play">Enter Play</label>
+        <input type="text" name="play" id="play" />
+      </form>
+    </div>
+    <div class="play-form-container-away">
+      <form class="play-form-away">
         <label for="play">Enter Play</label>
         <input type="text" name="play" id="play" />
       </form>

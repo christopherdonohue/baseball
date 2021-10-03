@@ -5,7 +5,9 @@ let homeLineup = [];
 const awayLineupBody = document.querySelector('#awayTeamLineup tbody');
 const homeLineupBody = document.querySelector('#homeTeamLineup tbody');
 const homeTeamBattingBody = document.querySelector('#homeTeamBatting tbody');
-const homeInnings = document.querySelector('.score-rows');
+const awayTeamBattingBody = document.querySelector('#awayTeamBatting tbody');
+const homeInnings = document.querySelector('.score-rows-home');
+const awayInnings = document.querySelector('.score-rows-away');
 
 const awayForm = document.getElementById('awayTeamPlayerForm');
 const awayFormClass = document.querySelector('.form-container-away');
@@ -13,9 +15,15 @@ const homeFormClass = document.querySelector('.form-container-home');
 const homeForm = document.getElementById('homeTeamPlayerForm');
 const addPlayerBtns = document.querySelectorAll('.add-player');
 const clearBtns = document.querySelectorAll('.clear-team');
-const playFormContainer = document.querySelector('.play-form-container');
+const playFormContainerHome = document.querySelector(
+  '.play-form-container-home'
+);
+const playFormContainerAway = document.querySelector(
+  '.play-form-container-away'
+);
 const playFormHome = document.querySelector('.play-form-home');
-
+const playFormAway = document.querySelector('.play-form-away');
+// THE EVIL GLOBAL VAR CUZ BAD DEV
 let globalIndex;
 
 const grantAbilityToEdit = () => {
@@ -35,55 +43,119 @@ const grantAbilityToEdit = () => {
   });
 };
 
-const addBlankCellsForBattingScore = (tr, team, lineup) => {
+const makeCellsClickable = (e, cell, team, lineup) => {
+  const inning = e.currentTarget.classList[1];
+
+  // first cell in each row with player and stats.
+  const td = e.currentTarget.parentElement.firstChild.className;
+  if (lineup === 'home') {
+    homeTeamBattingBody.childNodes.forEach((row) => {
+      row.childNodes.forEach((item) => {
+        // makes sure multiple at-bats are not edited
+        if (
+          item.classList[1] !== inning ||
+          row.childNodes[0].className !== td
+        ) {
+          item.classList.remove('edit');
+        }
+      });
+    });
+
+    cell.classList.add('edit');
+    playFormContainerHome.classList.add('show-play-form-home');
+    //listen for submit after at-bat edit
+
+    playFormHome.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // only clicked cell gets edited
+      if (cell.classList.contains('edit')) {
+        cell.innerHTML = e.target[0].value;
+        localStorage.setItem(
+          'homeAtBats',
+          JSON.stringify(homeTeamBattingBody.innerHTML)
+        );
+      }
+      cell.classList.remove('edit');
+      playFormContainerHome.classList.remove('show-play-form-home');
+    });
+  } else {
+    console.log('hello');
+    awayTeamBattingBody.childNodes.forEach((row) => {
+      row.childNodes.forEach((item) => {
+        // makes sure multiple at-bats are not edited
+        if (
+          item.classList[1] !== inning ||
+          row.childNodes[0].className !== td
+        ) {
+          item.classList.remove('edit');
+        }
+      });
+    });
+    cell.classList.add('edit');
+    playFormContainerAway.classList.add('show-play-form-away');
+    playFormAway.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // only clicked cell gets edited
+      if (cell.classList.contains('edit')) {
+        cell.innerHTML = e.target[0].value;
+        localStorage.setItem(
+          'awayAtBats',
+          JSON.stringify(awayTeamBattingBody.innerHTML)
+        );
+      }
+      cell.classList.remove('edit');
+      playFormContainerAway.classList.remove('show-play-form-away');
+    });
+  }
+};
+
+const addBlankCellsForBattingScore = (tr, team, players, lineup) => {
   for (let i = 1; i < team.children.length; i++) {
     let cell = tr.insertCell(i);
     cell.classList.add('inning');
     cell.classList.add(`${i}`);
 
     // listen for click to edit at-bat
-    cell.addEventListener('click', (e) => {
-      const inning = e.currentTarget.classList[1];
-      homeTeamBattingBody.childNodes.forEach((row) => {
-        row.childNodes.forEach((item) => {
-          if (item.classList[1] !== inning) {
-            item.classList.remove('edit');
-          }
-          if (item.className === '') {
-            console.log(item.innerText);
-          }
-        });
-      });
-
-      cell.classList.add('edit');
-      playFormContainer.classList.add('show-play-form');
-      //listen for submit after at-bat edit
-      playFormHome.addEventListener('submit', (e) => {
-        e.preventDefault();
-        console.log(e.target[0].value);
-        // only clicked cell gets edited
-        if (cell.classList.contains('edit')) cell.innerHTML = e.target[0].value;
-        cell.classList.remove('edit');
-        playFormContainer.classList.remove('show-play-form');
-      });
-    });
+    cell.addEventListener('click', (e) =>
+      makeCellsClickable(e, cell, team, lineup)
+    );
   }
 };
 
-const addBattersToTBody = (nodeList, players) => {
+const addBattersToTBody = (
+  team,
+  nodeList,
+  innings,
+  players,
+  atBats,
+  battingBody
+) => {
   let tr;
-  players.forEach((player, i) => {
-    tr = nodeList.insertRow(i);
-    let short = player.player.replace(' ', '');
-    let cell = tr.insertCell(0);
-    cell.classList.add(short);
-    Object.keys(player).forEach((key, j) => {
-      cell.innerHTML += player[key] + '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp';
+  // this adds click events to cells if at-bats are pulled from local storage
+  if (atBats) {
+    battingBody.innerHTML = atBats;
+    battingBody.childNodes.forEach((row) => {
+      row.childNodes.forEach((item) => {
+        item.addEventListener('click', (e) =>
+          makeCellsClickable(e, item, team)
+        );
+      });
     });
-    nodeList.appendChild(tr);
+  } else {
+    players.forEach((player, i) => {
+      tr = nodeList.insertRow(i);
+      // class can't have whitespace
+      let short = player.player.replace(' ', '');
+      let cell = tr.insertCell(0);
+      cell.classList.add(short);
+      Object.keys(player).forEach((key, j) => {
+        cell.innerHTML += player[key] + '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp';
+      });
+      nodeList.appendChild(tr);
+    });
 
-    addBlankCellsForBattingScore(tr, homeInnings, homeLineup);
-  });
+    addBlankCellsForBattingScore(tr, innings, players);
+  }
 };
 
 const addDataToTbody = (nodeList, players) => {
@@ -102,7 +174,6 @@ const handleSubmit = (e, team) => {
   // ADD PLAYER TO LINEUP AWAY TEAM
   if (team === 'away') {
     if (awayForm.classList.contains('edit')) {
-      console.log(e.target[globalIndex].value);
       awayLineup[globalIndex].player = e.target[0].value;
       awayLineup[globalIndex].jerseyNumber = e.target[1].value;
       awayLineup[globalIndex].positionPlayed = e.target[2].value;
@@ -118,24 +189,30 @@ const handleSubmit = (e, team) => {
       ).reduce((acc, input) => ({ ...acc, [input.id]: input.value }), {});
       awayLineup.push(newPlayer);
       localStorage.setItem('awayLineup', JSON.stringify(awayLineup));
-      console.log(newPlayer);
       const tr = awayLineupBody.insertRow(awayLineup.length - 1);
       Object.keys(newPlayer).forEach((key, j) => {
         const cell = tr.insertCell(j);
         cell.innerHTML = newPlayer[key];
       });
       awayLineupBody.appendChild(tr);
-      tr.addEventListener('click', () => {
-        console.log(tr);
+      const tr2 = awayTeamBattingBody.insertRow(awayLineup.length - 1);
+      let cell2 = tr2.insertCell(0);
+      tr.childNodes.forEach((node) => {
+        cell2.innerHTML += node.innerHTML + '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp';
       });
+
+      // add player name to td classlist. This helps ensure you don't edit two player's at-bats at the same time.
+      const playerNameForClass = newPlayer.player.replace(' ', '');
+      cell2.classList.add(playerNameForClass);
+      addBlankCellsForBattingScore(tr2, awayInnings, awayLineup, 'away');
     }
   } else {
     if (homeForm.classList.contains('edit')) {
-      console.log(e.target[globalIndex].value);
       homeLineup[globalIndex].player = e.target[0].value;
       homeLineup[globalIndex].jerseyNumber = e.target[1].value;
       homeLineup[globalIndex].positionPlayed = e.target[2].value;
       homeLineup[globalIndex].battingAverage = e.target[3].value;
+
       Object.keys(homeLineup[globalIndex]).forEach((key, index) => {
         homeLineupBody.childNodes[globalIndex].childNodes[index].innerHTML =
           e.target[index].value;
@@ -164,8 +241,7 @@ const handleSubmit = (e, team) => {
       // add player name to td classlist. This helps ensure you don't edit two player's at-bats at the same time.
       const playerNameForClass = newPlayer.player.replace(' ', '');
       cell2.classList.add(playerNameForClass);
-      console.log(cell2);
-      addBlankCellsForBattingScore(tr2, homeInnings, homeLineup);
+      addBlankCellsForBattingScore(tr2, homeInnings, homeLineup, 'home');
     }
   }
 };
@@ -178,7 +254,6 @@ clearBtns.forEach((btn) => {
     if (btn.classList.contains('away-team')) {
       localStorage.removeItem('awayLineup');
       awayLineupBody.innerHTML = '';
-      console.log(awayLineupBody);
     } else {
       localStorage.removeItem('homeLineup');
       homeLineupBody.innerHTML = '';
@@ -217,6 +292,12 @@ const getLocalStorage = () => {
     localStorage.getItem('homeLineup')
       ? JSON.parse(localStorage.getItem('homeLineup'))
       : [],
+    localStorage.getItem('homeAtBats')
+      ? JSON.parse(localStorage.getItem('homeAtBats'))
+      : [],
+    localStorage.getItem('awayAtBats')
+      ? JSON.parse(localStorage.getItem('awayAtBats'))
+      : [],
   ];
 };
 
@@ -224,9 +305,26 @@ window.addEventListener('DOMContentLoaded', () => {
   const local = getLocalStorage();
   awayLineup = local[0];
   homeLineup = local[1];
+  homeAtBats = local[2];
+  awayAtBats = local[3];
 
   addDataToTbody(awayLineupBody, awayLineup);
   addDataToTbody(homeLineupBody, homeLineup);
-  addBattersToTBody(homeTeamBattingBody, homeLineup);
+  addBattersToTBody(
+    'home',
+    homeTeamBattingBody,
+    homeInnings,
+    homeLineup,
+    homeAtBats,
+    homeTeamBattingBody
+  );
+  addBattersToTBody(
+    'away',
+    awayTeamBattingBody,
+    awayInnings,
+    awayLineup,
+    awayAtBats,
+    awayTeamBattingBody
+  );
   grantAbilityToEdit();
 });

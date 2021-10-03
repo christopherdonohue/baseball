@@ -86,12 +86,14 @@ td {
   border-collapse: collapse;
 }
 
-.play-form-container {
+.play-form-container-home,
+.play-form-container-away {
   position: absolute;
   transform: translateY(-1000%);
   visibility: hidden;
 }
 
-.show-play-form {
+.show-play-form-home,
+.show-play-form-away {
   visibility: visible;
 }
