@@ -8,6 +8,8 @@ const homeTeamBattingBody = document.querySelector('#homeTeamBatting tbody');
 const awayTeamBattingBody = document.querySelector('#awayTeamBatting tbody');
 const homeInnings = document.querySelector('.score-rows-home');
 const awayInnings = document.querySelector('.score-rows-away');
+const homeBattingTable = document.querySelector('.homeTeamBatting tbody');
+const awayBattingTable = document.querySelector('.awayTeamBatting tbody');
 
 const awayForm = document.getElementById('awayTeamPlayerForm');
 const awayFormClass = document.querySelector('.form-container-away');
@@ -25,6 +27,24 @@ const playFormHome = document.querySelector('.play-form-home');
 const playFormAway = document.querySelector('.play-form-away');
 // THE EVIL GLOBAL VAR CUZ BAD DEV
 let globalIndex;
+
+const setBattingLocalStorage = (team) => {
+  // switch statement cuz why not
+  switch (team) {
+    case 'home':
+      localStorage.setItem(
+        'homeAtBats',
+        JSON.stringify(homeTeamBattingBody.innerHTML)
+      );
+      break;
+    case 'away':
+      localStorage.setItem(
+        'awayAtBats',
+        JSON.stringify(awayTeamBattingBody.innerHTML)
+      );
+      break;
+  }
+};
 
 const grantAbilityToEdit = () => {
   awayLineupBody.childNodes.forEach((child, index) => {
@@ -79,7 +99,6 @@ const makeCellsClickable = (e, cell, team, lineup) => {
       playFormContainerHome.classList.remove('show-play-form-home');
     });
   } else {
-    console.log('hello');
     awayTeamBattingBody.childNodes.forEach((row) => {
       row.childNodes.forEach((item) => {
         // makes sure multiple at-bats are not edited
@@ -169,11 +188,33 @@ const addDataToTbody = (nodeList, players) => {
   });
 };
 
+const editBattingTable = (tempName, tableNodes, e) => {
+  tableNodes.forEach((node) => {
+    node.childNodes.forEach((anotherNode) => {
+      if (anotherNode.className === tempName) {
+        anotherNode.innerHTML =
+          e.target[0].value +
+          '&nbsp' +
+          e.target[1].value +
+          '&nbsp' +
+          e.target[2].value +
+          '&nbsp' +
+          e.target[3].value +
+          '&nbsp';
+      }
+    });
+  });
+};
+
 const handleSubmit = (e, team) => {
   e.preventDefault();
   // ADD PLAYER TO LINEUP AWAY TEAM
   if (team === 'away') {
     if (awayForm.classList.contains('edit')) {
+      const tempName = awayLineup[globalIndex].player;
+      let tableNodes = awayTeamBattingBody.childNodes;
+      editBattingTable(tempName, tableNodes, e);
+      setBattingLocalStorage('away');
       awayLineup[globalIndex].player = e.target[0].value;
       awayLineup[globalIndex].jerseyNumber = e.target[1].value;
       awayLineup[globalIndex].positionPlayed = e.target[2].value;
@@ -208,6 +249,12 @@ const handleSubmit = (e, team) => {
     }
   } else {
     if (homeForm.classList.contains('edit')) {
+      // edits the batting list
+      const tempName = homeLineup[globalIndex].player;
+      let tableNodes = homeTeamBattingBody.childNodes;
+      editBattingTable(tempName, tableNodes, e);
+      setBattingLocalStorage('home');
+      // edits the lineup card
       homeLineup[globalIndex].player = e.target[0].value;
       homeLineup[globalIndex].jerseyNumber = e.target[1].value;
       homeLineup[globalIndex].positionPlayed = e.target[2].value;
